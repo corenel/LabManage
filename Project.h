@@ -20,7 +20,7 @@ public:
     std::string getName() {return name;};
     void setID(const int inputID) {id = inputID;};
     void setName(const std::string inputName) {name = inputName;};
-    void addP(menmber const &newP) {participant.push_back(newP);};
+    void add(menmber const &newP) {participant.push_back(newP);};
 
 };
 #endif //LABMANAGE_PROJECT_H
