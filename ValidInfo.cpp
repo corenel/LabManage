@@ -11,14 +11,16 @@ std::string ValidInfo::validEmail(const std::string &_email) {
         if (atCount == 1)
             return _email;
         else{
-            std::cout << "Error: Invalid e-mail address, you couldn't muse more than 1 '@' character. Please try again." << std::endl;
+            std::cout << "Error: Invalid e-mail address, you couldn't muse more than 1 '@' character." << std::endl;
+            std::cout << ">> Please try again:" << std::endl;
             std::string __email;
             std::cin >> __email;
             return validEmail(__email);
         }
     }
     else{
-        std::cout << "Error: Invalid e-mail address. Please try again." << std::endl;
+        std::cout << "Error: Invalid e-mail address." << std::endl;
+        std::cout << ">> Please try again:" << std::endl;
         std::string __email;
         std::cin >> __email;
         return validEmail(__email);
@@ -28,8 +30,8 @@ std::string ValidInfo::validEmail(const std::string &_email) {
 std::string ValidInfo::validSelector(const std::string &_selector, const std::string &AllowedChars) {
     for (auto SelectorChar = _selector.begin(); SelectorChar != _selector.end(); SelectorChar++) {
         if (AllowedChars.find(*SelectorChar) == std::string::npos) {
-            std::cout << "Error: Invalid input selector number. Please try again." << std::endl;
-            std::cout << ">> Please choose one operation: ";
+            std::cout << "Error: Invalid input number." << std::endl;
+            std::cout << ">> Please try again: ";
             std::string __selector;
             std::cin >> __selector;
             return validSelector(__selector, AllowedChars);

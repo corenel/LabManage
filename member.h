@@ -1,6 +1,7 @@
 #ifndef MEMBER_H
 #define MEMBER_H
 
+#include <iostream>
 #include <string>
 
 class member {
@@ -21,11 +22,14 @@ public:
     std::string getName() const {return name;};
     std::string getPhone() const {return phone;};
     std::string getEmail() const {return email;};
+    void printInfo() const { std::cout << username << " ******** "
+                                       << name << " " << phone << " " << email << std::endl;}
 
     // Set user info
     void setName(const std::string inputName) {name = inputName;};
     void setPhone(const std::string inputPhone) {phone = inputPhone;};
     void setEmail(const std::string inputEmail) {email = inputEmail;};
+    void setUsername(const std::string inputUsername) {username = inputUsername;};
     void chgPwd(const std::string currentPwd, const std::string inputPwd);
     bool checkAcct(const std::string currentPwd);
 };
