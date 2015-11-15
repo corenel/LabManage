@@ -25,13 +25,14 @@ std::string ValidInfo::validEmail(const std::string &_email) {
     }
 }
 
-std::string ValidInfo::validSelector(const std::string &_selector) {
+std::string ValidInfo::validSelector(const std::string &_selector, const std::string &AllowedChars) {
     for (auto SelectorChar = _selector.begin(); SelectorChar != _selector.end(); SelectorChar++) {
-        if ((*SelectorChar > '9') || (*SelectorChar < '0')) {
+        if (AllowedChars.find(*SelectorChar) == std::string::npos) {
             std::cout << "Error: Invalid input selector number. Please try again." << std::endl;
+            std::cout << ">> Please choose one operation: ";
             std::string __selector;
             std::cin >> __selector;
-            return validSelector(__selector);
+            return validSelector(__selector, AllowedChars);
         }
     }
     return _selector;
