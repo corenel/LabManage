@@ -8,8 +8,8 @@
       <sourceFolder url="file://$MODULE_DIR$/Member.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Project.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Project.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Valid.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Valid.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ValidInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ValidInfo.h" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

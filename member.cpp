@@ -20,9 +20,9 @@ void member::chgPwd(const std::string currentPwd, const std::string inputPwd){
     }
 }
 
-void admin::setPwd(const std::string currentPwd, const std::string inputPwd, const member &user) {
+void admin::setPwd(const std::string currentPwd, const std::string &inputPwd, member &user) {
     if (checkAcct(currentPwd)) {
-        user->password = inputPwd;
+        user.password = inputPwd;
         std::cout << "Current password has been changed." << std::endl;
     }
     else {

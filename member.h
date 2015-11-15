@@ -4,7 +4,7 @@
 #include <string>
 
 class member {
-    friend admin;
+    friend class admin;
 protected:
     std::string username, password;     // Account info
     int level;                          // User level
@@ -34,16 +34,16 @@ class admin : public member {
 public:
     admin() = default;
     admin(const std::string &s1, const std::string &s2):
-            username(s1), password(s2), level(3) { };
+            member(s1, s2, 3) { };
     ~admin();
-    void setPwd(const std::string currentPwd, const std::string inputPwd, const member &user);
+    void setPwd(const std::string currentPwd, const std::string &inputPwd, member &user);
 };
 
 class teacher : public member {
 public:
     teacher() = default;
     teacher(const std::string &s1, const std::string &s2):
-            username(s1), password(s2), level(2) { };
+            member(s1, s2, 2) { };
     ~teacher();
 };
 
@@ -51,7 +51,7 @@ class student : public member {
 public:
     student() = default;
     student(const std::string &s1, const std::string &s2):
-            username(s1), password(s2), level(2) { };
+            member(s1, s2, 1) { };
     ~student();
 };
 
