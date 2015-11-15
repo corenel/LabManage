@@ -1,12 +1,12 @@
-#ifndef LABMANAGE_PROJECT_H
-#define LABMANAGE_PROJECT_H
+#ifndef PROJECT_H
+#define PROJECT_H
 
 #include <string>
 #include <vector>
 
 class project{
 private:
-    int id;
+    int prj_id;
     std::string name;
     std::string ddl;
     vector<member> participant;
@@ -16,11 +16,11 @@ public:
     project(const std::string &s1, const std::string &s2):
             name(s1), ddl(s2) { };
     ~project();
-    int getID() {return id;};
-    std::string getName() {return name;};
-    void setID(const int inputID) {id = inputID;};
+    int getID() const {return prj_id;};
+    std::string getName() const {return name;};
+    void setID(const int inputID) {prj_id = inputID;};
     void setName(const std::string inputName) {name = inputName;};
     void add(menmber const &newP) {participant.push_back(newP);};
 
 };
-#endif //LABMANAGE_PROJECT_H
+#endif //PROJECT_H

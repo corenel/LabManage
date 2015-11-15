@@ -19,3 +19,13 @@ void member::chgPwd(const std::string currentPwd, const std::string inputPwd){
         std::cout << "Invalid username or password." << std::endl;
     }
 }
+
+void admin::setPwd(const std::string currentPwd, const std::string inputPwd, const member &user) {
+    if (checkAcct(currentPwd)) {
+        user->password = inputPwd;
+        std::cout << "Current password has been changed." << std::endl;
+    }
+    else {
+        std::cout << "Invalid username or password." << std::endl;
+    }
+}
