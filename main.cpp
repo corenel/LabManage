@@ -199,7 +199,7 @@ int main() {
                 }
                 cout << "----------------------------" << endl;
                 cout << endl;
-                goto MainMenu;
+                goto MemberMenu;
             case 3:
                 goto MainMenu;
             default:
@@ -304,7 +304,7 @@ int main() {
                     cout << "3. E-mail" << endl;
                     cout << "4. Username" << endl;
                     cout << "5. Password" << endl;
-                    cout << "6. Bcak" << endl;
+                    cout << "6. Back" << endl;
                     cout << ">> Please choose one operation: ";
                     cin >> _selector;
                     selector = atoi(ValidInfo::validSelector(_selector, "123456").c_str());
@@ -348,7 +348,7 @@ int main() {
                                 goto ChgPwd;
                             }
                         case 6:
-                            goto EditProfile;
+                            goto ManageMenu;
                         default:
                             break;
                     }
@@ -402,9 +402,7 @@ int main() {
                 }
                 else {
                     cout << "Plaease choose a project to quit: " << endl;
-                    for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
-                        cout << (*prjIter)->getID() << ". " << (*prjIter)->getName() << endl;
-                    }
+                    loggedMember->printMyPrj();
                     cin >> _selector;
                     selector = atoi(ValidInfo::validSelector(_selector, "1234567890").c_str());
                     for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
@@ -495,6 +493,7 @@ int main() {
                 }
                 else {
                     loggedMember->showPermission();
+                    goto AdminMenu;
                 }
             case 1:
             EditUser:
