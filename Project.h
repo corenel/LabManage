@@ -2,26 +2,36 @@
 #define PROJECT_H
 
 #include <string>
-#include <vector>
+#include <list>
 #include "Member.h"
+
+class member;
 
 class project{
 private:
-    int prj_id;
     std::string name;
-    std::string ddl;
-    std::vector<member> participant;
+    std::string deadLine;
+    int prjId;
+    std::list<member *> participant;
 public:
-    project() = default;
-    project(const std::string &s): name(s) { };
+    project() : prjId(prjIDCnt++) {};
+    project(const std::string &s): name(s), prjId(prjIDCnt++) { };
     project(const std::string &s1, const std::string &s2):
-            name(s1), ddl(s2) { };
+            name(s1), deadLine(s2), prjId(prjIDCnt++)  { };
     ~project();
-    int getID() const {return prj_id;};
+
+    static int prjIDCnt;
+
+    int getID() const {return prjId;};
     std::string getName() const {return name;};
-    void setID(const int inputID) {prj_id = inputID;};
+    std::string getDDL() const {return deadLine;};
+    void printPrj();
+
     void setName(const std::string inputName) {name = inputName;};
-    void add(member const &newP) {participant.push_back(newP);};
+    void setDDL(const std::string inputDDL) {deadLine = inputDDL;};
+
+    void addMember(member *newMember);
+    void removeMember(member *deleteMember);
 
 };
 #endif //PROJECT_H

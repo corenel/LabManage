@@ -11,6 +11,8 @@ using namespace std;
 
 string _selector;
 int selector;
+int member::memberIDCnt = 0;
+int project::prjIDCnt = 0;
 
 void mainMenu() {
     cout << "==========================================================" << endl;
@@ -44,11 +46,10 @@ void projectMenu() {
     cout << "==========================================================" << endl;
     cout << "1. Add a new project" << endl;
     cout << "2. List all projects" << endl;
-    cout << "3. Edit projects" << endl;
-    cout << "4. Back" << endl;
+    cout << "3. Back" << endl;
     cout << ">> Please choose one operation: ";
     cin >> _selector;
-    selector = atoi(ValidInfo::validSelector(_selector, "1234").c_str());
+    selector = atoi(ValidInfo::validSelector(_selector, "123").c_str());
 }
 
 void manageMenu() {
@@ -58,33 +59,54 @@ void manageMenu() {
     cout << "1. Login" << endl;
     cout << "2. Show Profile" << endl;
     cout << "3. Edit Profile" << endl;
-    cout << "4. Change Password" << endl;
-    cout << "5. Participate in a project" << endl;
-    cout << "6. Back" << endl;
+    cout << "4. Participate in a project" << endl;
+    cout << "5. Quit a project" << endl;
+    cout << "6. List my project" << endl;
+    cout << "7. List participant of a project" << endl;
+    cout << "8. Back" << endl;
     cout << ">> Please choose one operation: ";
     cin >> _selector;
-    selector = atoi(ValidInfo::validSelector(_selector, "123456").c_str());
+    selector = atoi(ValidInfo::validSelector(_selector, "12345678").c_str());
 }
 
 void adminMenu() {
     cout << "==========================================================" << endl;
     cout << "                        Admin Menu                        " << endl;
     cout << "==========================================================" << endl;
-    cout << "1. Login" << endl;
-    cout << "2. Edit user information" << endl;
-    cout << "3. Edit project information" << endl;
-    cout << "4. Back" << endl;
+    cout << "0. Show my permission" << endl;
+    cout << "1. Edit user password" << endl;
+    cout << "2. Edit project information" << endl;
+    cout << "3. Delete a member" << endl;
+    cout << "4. Delete a project" << endl;
+    cout << "5. Back" << endl;
     cout << ">> Please choose one operation: ";
     cin >> _selector;
-    selector = atoi(ValidInfo::validSelector(_selector, "1234").c_str());
+    selector = atoi(ValidInfo::validSelector(_selector, "012345").c_str());
 }
 int main() {
     list<member*> memberList;
     list<member*>::iterator memberIter;
-    member *loggedMember = new member();
+    member *loggedMember;
     bool _logged = false;
     int memberType;
-    string _username, _password, _name, _phone, _email;
+    list<project*> prjList;
+    list<project*>::iterator prjIter;
+    string _username, _password, _currentpwd, _name, _phone, _email, _prjName, _prjDDL;
+
+    member *m1, *m2, *m3, *su;
+    project *p1, *p2;
+    su = new admin("admin", "admin", "Super User", "123", "xx@xx.xx");
+    m1 = new student("zs", "zs", "Zhang San", "123", "xx@xx.xx");
+    m2 = new student("ls", "ls", "Li si", "123", "xx@xx.xx");
+    m3 = new teacher("wh", "wh", "Wang Hui", "123", "xx@xx.xx");
+    memberList.push_front(su);
+    memberList.push_front(m1);
+    memberList.push_front(m2);
+    memberList.push_front(m3);
+    p1 = new project("OOP Final Project", "2015-11-16");
+    p2 = new project("Mid Term test", "2015-11-12");
+    prjList.push_front(p1);
+    prjList.push_front(p2);
 
     cout << "==========================================================" << endl;
     cout << "|      |     |\\  /|                                     | " << endl;
@@ -168,14 +190,12 @@ int main() {
                     default:
                         break;
                 }
-                break;
             case 2:
                 cout << endl;
                 cout << "      List all members      " << endl;
                 cout << "----------------------------" << endl;
-                memberIter = memberList.begin();
-                for (int i = 1; memberIter != memberList.end();i++, memberIter++) {
-                    cout << i << ". " << (*memberIter)->getName() << endl;
+                for (memberIter = memberList.begin(); memberIter != memberList.end(); memberIter++) {
+                    cout << (*memberIter)->getID() << ". " << (*memberIter)->getName() << endl;
                 }
                 cout << "----------------------------" << endl;
                 cout << endl;
@@ -189,12 +209,45 @@ int main() {
         projectMenu();
         switch (selector) {
             case 1:
-                break;
+            AddPrj:
+                cout << endl;
+                cout << "       Add new project      " << endl;
+                cout << "----------------------------" << endl;
+                prjList.push_front(new project);
+                prjIter = prjList.begin();
+                cout << ">> Please enter project name:" << endl;
+                cin >> _prjName;
+                (*prjIter)->setName(_prjName);
+                cout << ">> Please enter project DeadLine:" << endl;
+                cin >> _prjDDL;
+                (*prjIter)->setDDL(_prjDDL);
+                cout << "Congratulations! You've successfully add a new project." << endl
+                << "Following are what you input: " << endl;
+                (*prjIter)->printPrj();
+                cout << ">> Then you want to:" << endl;
+                cout << "    1. Add another projrct" << endl;
+                cout << "    2. Back to Project Menu" << endl;
+                cin >> _selector;
+                selector = atoi(ValidInfo::validSelector(_selector, "12").c_str());
+                switch (selector) {
+                    case 1:
+                        goto AddPrj;
+                    case 2:
+                        goto ProjectMenu;
+                    default:
+                        break;
+                }
             case 2:
-                break;
+                cout << endl;
+                cout << "      List all members      " << endl;
+                cout << "----------------------------" << endl;
+                for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
+                    cout << (*prjIter)->getID() << ". " << (*prjIter)->getName() << endl;
+                }
+                cout << "----------------------------" << endl;
+                cout << endl;
+                goto MainMenu;
             case 3:
-                break;
-            case 4:
                 goto MainMenu;
             default:
                 break;
@@ -203,16 +256,228 @@ int main() {
         manageMenu();
         switch (selector) {
             case 1:
-                break;
+            Login:
+                cout << endl;
+                cout << "          Login in          " << endl;
+                cout << "----------------------------" << endl;
+                cout << ">> Please enter your username: " << endl;
+                cin >> _username;
+                cout << ">> Please enter your password: " << endl;
+                cin >> _password;
+                for (memberIter = memberList.begin(); memberIter != memberList.end(); memberIter++) {
+                    if ((*memberIter)->checkAcct(_username, _password)) {
+                        cout << endl;
+                        cout << "Login Successfuly!" << endl;
+                        cout << "Welcome " << (*memberIter)->getName() << endl;
+                        cout << endl;
+                        loggedMember = *memberIter;
+                        _logged = true;
+                        goto ManageMenu;
+                    }
+                }
+                cout << "Error: Invalid username or password. Please try again." << endl;
+                goto Login;
             case 2:
-                break;
+                cout << endl;
+                cout << "        Show Profile        " << endl;
+                cout << "----------------------------" << endl;
+                if (!_logged) {
+                    cout << "Please login first." << endl;
+                    goto Login;
+                }
+                else {
+                    loggedMember->printInfo();
+                }
+                goto ManageMenu;
             case 3:
-                break;
+            EditProfile:
+                cout << endl;
+                cout << "        Edit Profile        " << endl;
+                cout << "----------------------------" << endl;
+                if (!_logged) {
+                    cout << "Please login first." << endl;
+                    goto Login;
+                }
+                else {
+                    cout << "1. Name" << endl;
+                    cout << "2. Phone" << endl;
+                    cout << "3. E-mail" << endl;
+                    cout << "4. Username" << endl;
+                    cout << "5. Password" << endl;
+                    cout << "6. Bcak" << endl;
+                    cout << ">> Please choose one operation: ";
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "123456").c_str());
+                    switch (selector) {
+                        case 1:
+                            cout << ">> Please enter name:" << endl;
+                            cin >> _name;
+                            loggedMember->setName(_name);
+                            cout << "Your name has been changede to " << loggedMember->getName() << " successfully!" << endl;
+                            goto EditProfile;
+                        case 2:
+                            cout << ">> Please enter phone:" << endl;
+                            cin >> _phone;
+                            loggedMember->setPhone(ValidInfo::validSelector(_phone, "0123456789-"));
+                            cout << "Your phone has been changede to " << loggedMember->getPhone() << " successfully!" << endl;
+                            goto EditProfile;
+                        case 3:
+                            cout << ">> Please enter E-mail:" << endl;
+                            cin >> _email;
+                            loggedMember->setEmail(ValidInfo::validEmail(_email));
+                            cout << "Your E-mail has been changede to " << loggedMember->getEmail() << " successfully!" << endl;
+                            goto EditProfile;
+                        case 4:
+                            cout << ">> Please enter username:" << endl;
+                            cin >> _username;
+                            loggedMember->setUsername(_username);
+                            cout << "Your username has been changede to " << loggedMember->getUsername() << " successfully!" << endl;
+                            goto EditProfile;
+                        case 5:
+                        ChgPwd:
+                            cout << ">> Please enter your current password:" << endl;
+                            cin >> _currentpwd;
+                            if (loggedMember->checkAcct(loggedMember->getUsername(), _currentpwd)){
+                                cout << ">> Please enter your expected password:" << endl;
+                                cin >> _password;
+                                loggedMember->chgPwd(_currentpwd,_password);
+                                goto EditProfile;
+                            }
+                            else {
+                                std::cout << "Error: Invalid current password. Please try again." << std::endl;
+                                goto ChgPwd;
+                            }
+                        case 6:
+                            goto EditProfile;
+                        default:
+                            break;
+                    }
+                }
             case 4:
-                break;
+            PartInPrj:
+                cout << endl;
+                cout << "  Participate in a project  " << endl;
+                cout << "----------------------------" << endl;
+                if (!_logged) {
+                    cout << "Please login first." << endl;
+                    goto Login;
+                }
+                else {
+                    cout << "Plaease choose a project to take part in: " << endl;
+                    for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
+                        cout << (*prjIter)->getID() << ". " << (*prjIter)->getName() << endl;
+                    }
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "1234567890").c_str());
+                    for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
+                        if ((*prjIter)->getID() == selector) {
+                            (*prjIter)->addMember(loggedMember);
+                            loggedMember->addPrj(*prjIter);
+                            cout << "Congratulations! You've participated in " << (*prjIter)->getName() << " successfully!" << endl;
+                            break;
+                        }
+                    }
+                    cout << ">> Then you want to:" << endl;
+                    cout << "    1. Participate in another projrct" << endl;
+                    cout << "    2. Back to Manage Menu" << endl;
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "12").c_str());
+                    switch (selector) {
+                        case 1:
+                            goto PartInPrj;
+                        case 2:
+                            goto ManageMenu;
+                        default:
+                            break;
+                    }
+                }
             case 5:
-                break;
+            QuitPrj:
+                cout << endl;
+                cout << "       Quit a project       " << endl;
+                cout << "----------------------------" << endl;
+                if (!_logged) {
+                    cout << "Please login first." << endl;
+                    goto Login;
+                }
+                else {
+                    cout << "Plaease choose a project to quit: " << endl;
+                    for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
+                        cout << (*prjIter)->getID() << ". " << (*prjIter)->getName() << endl;
+                    }
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "1234567890").c_str());
+                    for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
+                        if ((*prjIter)->getID() == selector) {
+                            (*prjIter)->removeMember(loggedMember);
+                            loggedMember->removePrj(*prjIter);
+                            cout << "Congratulations! You've quit " << (*prjIter)->getName() << " successfully!" << endl;
+                            break;
+                        }
+                    }
+                    cout << ">> Then you want to:" << endl;
+                    cout << "    1. Quit another projrct" << endl;
+                    cout << "    2. Back to Manage Menu" << endl;
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "12").c_str());
+                    switch (selector) {
+                        case 1:
+                            goto QuitPrj;
+                        case 2:
+                            goto ManageMenu;
+                        default:
+                            break;
+                    }
+                }
             case 6:
+                cout << endl;
+                cout << "       List my project      " << endl;
+                cout << "----------------------------" << endl;
+                if (!_logged) {
+                    cout << "Please login first." << endl;
+                    goto Login;
+                }
+                else {
+                    loggedMember->printMyPrj();
+                    goto ManageMenu;
+                }
+            case 7:
+            PrintPrj:
+                cout << endl;
+                cout << "List participant of a project" << endl;
+                cout << "----------------------------" << endl;
+                if (!_logged) {
+                    cout << "Please login first." << endl;
+                    goto Login;
+                }
+                else {
+                    cout << "Plaease choose a project to list: " << endl;
+                    for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
+                        cout << (*prjIter)->getID() << ". " << (*prjIter)->getName() << endl;
+                    }
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "1234567890").c_str());
+                    for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
+                        if ((*prjIter)->getID() == selector) {
+                            (*prjIter)->printPrj();
+                            break;
+                        }
+                    }
+                    cout << ">> Then you want to:" << endl;
+                    cout << "    1. List another projrct" << endl;
+                    cout << "    2. Back to Manage Menu" << endl;
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "12").c_str());
+                    switch (selector) {
+                        case 1:
+                            goto PrintPrj;
+                        case 2:
+                            goto ManageMenu;
+                        default:
+                            break;
+                    }
+                }
+            case 8:
                 goto MainMenu;
             default:
                 break;
@@ -220,13 +485,203 @@ int main() {
     AdminMenu:
         adminMenu();
         switch (selector) {
+            case 0:
+                cout << endl;
+                cout << "      Show my permission    " << endl;
+                cout << "----------------------------" << endl;
+                if (!_logged) {
+                    cout << "Please login first." << endl;
+                    goto Login;
+                }
+                else {
+                    loggedMember->showPermission();
+                }
             case 1:
-                break;
+            EditUser:
+                cout << endl;
+                cout << "      Edit User password    " << endl;
+                cout << "----------------------------" << endl;
+                if (_logged && (loggedMember->getLevel() == 3) ) {
+                    cout << "Plaease choose a user to edit: " << endl;
+                    for (memberIter = memberList.begin(); memberIter != memberList.end(); memberIter++) {
+                        cout << (*memberIter)->getID() << ". " << (*memberIter)->getName() << endl;
+                    }
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "1234567890").c_str());
+                    for (memberIter = memberList.begin(); memberIter != memberList.end(); memberIter++) {
+                        if ((*memberIter)->getID() == selector) {
+                            cout << ">> Admin password:" << endl;
+                            cin >> _currentpwd;
+                            if (loggedMember->checkAcct(loggedMember->getUsername(), _currentpwd)){
+                                cout << ">> Please enter your expected password:" << endl;
+                                cin >> _password;
+                                loggedMember->resetPwd(*memberIter, _password);
+                                break;
+                            }
+                        }
+                    }
+                    cout << ">> Then you want to:" << endl;
+                    cout << "    1. Edit another memeber's password" << endl;
+                    cout << "    2. Back to Admin Menu" << endl;
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "12").c_str());
+                    switch (selector) {
+                        case 1:
+                            goto EditUser;
+                        case 2:
+                            goto AdminMenu;
+                        default:
+                            break;
+                    }
+                }
+                else {
+                    cout << "Please login as Admin first." << endl;
+                    goto Login;
+                }
             case 2:
-                break;
+            EditPrj:
+                cout << endl;
+                cout << "      Edit Project Info     " << endl;
+                cout << "----------------------------" << endl;
+                if (_logged && (loggedMember->getLevel() >= 2) ) {
+                    cout << "Plaease choose a project to edit: " << endl;
+                    for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
+                        cout << (*prjIter)->getID() << ". " << (*prjIter)->getName() << endl;
+                    }
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "1234567890").c_str());
+                    for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
+                        if ((*prjIter)->getID() == selector) {
+                            cout << ">> Verify your password:" << endl;
+                            cin >> _currentpwd;
+                            if (loggedMember->checkAcct(loggedMember->getUsername(), _currentpwd)){
+                                cout << ">> Please choose item to edit:" << endl;
+                                cout << "    1. Name" << endl;
+                                cout << "    2. Deadline" << endl;
+                                cin >> _selector;
+                                selector = atoi(ValidInfo::validSelector(_selector, "12").c_str());
+                                switch (selector) {
+                                    case 1:
+                                        cout << ">> Please enter project name:" << endl;
+                                        cin >> _prjName;
+                                        (*prjIter)->setName(_prjName);
+                                    case 2:
+                                        cout << ">> Please enter project DeadLine:" << endl;
+                                        cin >> _prjDDL;
+                                        (*prjIter)->setDDL(_prjDDL);
+                                }
+                                cout << "Congratulations! You've successfully edit a project." << endl
+                                << "Following are what you input: " << endl;
+                                (*prjIter)->printPrj();
+                                break;
+                            }
+                        }
+                    }
+                    cout << ">> Then you want to:" << endl;
+                    cout << "    1. Edit another project info" << endl;
+                    cout << "    2. Back to Admin Menu" << endl;
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "12").c_str());
+                    switch (selector) {
+                        case 1:
+                            goto EditPrj;
+                        case 2:
+                            goto AdminMenu;
+                        default:
+                            break;
+                    }
+                }
+                else {
+                    cout << "Please login as Admin first." << endl;
+                    goto Login;
+                }
             case 3:
-                break;
+            DeleteUser:
+                cout << endl;
+                cout << "        Delete a member     " << endl;
+                cout << "----------------------------" << endl;
+                if (_logged && (loggedMember->getLevel() == 3) ) {
+                    cout << "Plaease choose a user to delete: " << endl;
+                    for (memberIter = memberList.begin(); memberIter != memberList.end(); memberIter++) {
+                        cout << (*memberIter)->getID() << ". " << (*memberIter)->getName() << endl;
+                    }
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "1234567890").c_str());
+                    for (memberIter = memberList.begin(); memberIter != memberList.end(); memberIter++) {
+                        if ((*memberIter)->getID() == selector) {
+                            cout << ">> Admin password:" << endl;
+                            cin >> _currentpwd;
+                            if (loggedMember->checkAcct(loggedMember->getUsername(), _currentpwd)){
+                                if (!memberList.empty()){
+                                    memberList.remove(*memberIter);
+                                }
+                                else {
+                                    std::cout << "There is no member now." << std::endl;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    cout << ">> Then you want to:" << endl;
+                    cout << "    1. Delete another memeber" << endl;
+                    cout << "    2. Back to Admin Menu" << endl;
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "12").c_str());
+                    switch (selector) {
+                        case 1:
+                            goto DeleteUser;
+                        case 2:
+                            goto AdminMenu;
+                        default:
+                            break;
+                    }
+                }
+                else {
+                    cout << "Please login as Admin first." << endl;
+                    goto Login;
+                }
             case 4:
+            DeletePrj:
+                cout << endl;
+                cout << "        Delete a project    " << endl;
+                cout << "----------------------------" << endl;
+                if (_logged && (loggedMember->getLevel() == 3) ) {
+                    cout << "Plaease choose a project to delete: " << endl;
+                    for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
+                        cout << (*prjIter)->getID() << ". " << (*prjIter)->getName() << endl;
+                    }
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "1234567890").c_str());
+                    for (prjIter = prjList.begin(); prjIter != prjList.end(); prjIter++) {
+                        if ((*prjIter)->getID() == selector) {
+                            cout << ">> Admin password:" << endl;
+                            cin >> _currentpwd;
+                            if (loggedMember->checkAcct(loggedMember->getUsername(), _currentpwd)){
+                                if (!prjList.empty()){
+                                    prjList.remove(*prjIter);
+                                }
+                                else {
+                                    std::cout << "There is no project now." << std::endl;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    cout << ">> Then you want to:" << endl;
+                    cout << "    1. Delete another project" << endl;
+                    cout << "    2. Back to Admin Menu" << endl;
+                    cin >> _selector;
+                    selector = atoi(ValidInfo::validSelector(_selector, "12").c_str());
+                    switch (selector) {
+                        case 1:
+                            goto DeletePrj;
+                        case 2:
+                            goto AdminMenu;
+                        default:
+                            break;
+                    }
+                }
+            case 5:
                 goto MainMenu;
             default:
                 break;
